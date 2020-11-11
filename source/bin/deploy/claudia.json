@@ -1,0 +1,11 @@
+{
+  "lambda": {
+    "role": "0xcert-api-deployment-executor",
+    "name": "credentify-app-api-prod",
+    "region": "eu-central-1",
+    "sharedRole": true
+  },
+  "api": {
+    "id": "hul633qpz7"
+  }
+}

@@ -1,0 +1,28 @@
+import { Spec } from '@hayspec/spec';
+import { Context } from '../../../context';
+import { Profile } from '../../../models/profile';
+import { cleenupContextMongoHelper, closeContextMongoHelper, createContextHelper } from '../../helpers/context';
+
+const spec = new Spec<{
+  context: Context;
+}>();
+
+spec.before(createContextHelper);
+spec.after(closeContextMongoHelper);
+spec.afterEach(cleenupContextMongoHelper);
+
+spec.test('populates model based on the provided email', async (ctx) => {
+  const context = ctx.get('context');
+  const model = await new Profile({}, { context }).fake().create();
+  const profile = await model.populateByEmail(model.email);
+  ctx.is((profile === model), true);
+});
+
+spec.test('fails to populate model with no provided email', async (ctx) => {
+  const context = ctx.get('context');
+  const model = await new Profile({}, { context }).fake().create();
+  const profile = await model.populateByEmail(null);
+  ctx.is(profile._id, null);
+});
+
+export default spec;
